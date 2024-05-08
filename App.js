@@ -1,12 +1,73 @@
-import { StatusBar } from 'expo-status-bar';
+// react native imports
 import { StyleSheet, Text, View } from 'react-native';
 
+// react navigation imports
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+
+// redux imports
+import store from './redux/store';
+import { Provider } from 'react-redux';
+
+
+// screens imports
+import CatalogueScreen from './screens/catalogueScreen';
+import CoursesScreen from './screens/coursesScreen';
+import CartScreen from './screens/cartScreen';
+import PurchaseScreen from './screens/purchaseScreen';
+import options from './components/utils'
+
+import { MaterialIcons } from '@expo/vector-icons';
+
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+
 export default function App() {
+  const MyDrawer = () =>{
+    return (
+      <NavigationContainer>
+        <Drawer.Navigator
+          screenOptions={{
+            headerRight:()=>{ // icons à droite 
+              return <MaterialIcons name="shopping-cart" size={24} color="green" style={{marginRight:10}} />
+            },
+            drawerActiveTintColor:'green',
+            drawerInactiveTintColor:'black',
+            drawerStyle:{
+              width: 210,
+            }
+          }}
+        >
+          <Drawer.Screen 
+            name="Catalogue" 
+            component={CatalogueScreen}
+            options={options('bookmarks')}
+          />
+          <Drawer.Screen 
+            name="Panier" 
+            component={CartScreen} 
+            options={options('shopping-cart')}
+          />
+          <Drawer.Screen 
+            name="Mes Achats" 
+            component={PurchaseScreen}
+            options={options('payments')}
+          />
+          <Drawer.Screen 
+            name="Mes Cours" 
+            component={CoursesScreen}
+            options={options('book')}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    )
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}> 
+      <MyDrawer/>
+    </Provider>
   );
 }
 
@@ -16,5 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    alignItems:'center',
   },
 });

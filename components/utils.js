@@ -2,9 +2,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 // Drawer.Screen options: 
 export default options = (myProp) => ({
     //drawerLabel: 'Accueil',
-    drawerIcon: function(){
+    drawerIcon: function(){ 
+        // le bind permet de passer des paramètres supplémentaires à la fonction
+        // ici, on passe le paramètre myProp à la fonction
+        // myProp est le nom de l'icône que l'on veut afficher dans le drawer
+        // sachant que l'icône change en fonction du paramètre myProp
+        // est que la fonction drawerIcon est fléchée à 3 atributs (size, color, focusable)
+        // donc il faut rajouter le bind pour passer les paramètres supplémentaires à la fonction drawerIcon
       return <MaterialIcons name={myProp} size={24} color="green"/>
-    }.bind(null, myProp),
+    }.bind(null, myProp), 
     headerShown: true,
     //headerTitle: 'Titre de la page',
     headerTitleAlign: 'center', // centrer le titre

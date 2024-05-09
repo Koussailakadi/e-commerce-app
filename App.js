@@ -1,5 +1,6 @@
 // react native imports
 import { StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 // react navigation imports
 import { NavigationContainer } from '@react-navigation/native';
@@ -19,6 +20,7 @@ import PurchaseScreen from './screens/purchaseScreen';
 import options from './components/utils'
 
 import { MaterialIcons } from '@expo/vector-icons';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -29,16 +31,22 @@ export default function App() {
     return (
       <NavigationContainer>
         <Drawer.Navigator
-          screenOptions={{
-            headerRight:()=>{ // icons à droite 
-              return <MaterialIcons name="shopping-cart" size={24} color="green" style={{marginRight:10}} />
+          screenOptions={({navigation, route})=> ({
+              headerRight:()=>{ // icons à droite 
+                const iconAndScreen = route.name === 'Panier' ? {icon:'bookmarks',screen:'Catalogue'} : {icon:'shopping-cart',screen:'Panier'}
+                return <MaterialIcons 
+                  name={iconAndScreen.icon}
+                  size={24} color="green" 
+                  style={{marginRight:10}} 
+                  onPress={()=>navigation.navigate(iconAndScreen.screen)}
+                />
             },
             drawerActiveTintColor:'green',
             drawerInactiveTintColor:'black',
             drawerStyle:{
               width: 210,
-            }
-          }}
+            },
+          })}
         >
           <Drawer.Screen 
             name="Catalogue" 

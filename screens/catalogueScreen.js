@@ -2,38 +2,51 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from'react-redux';
 import { addCourseCart, removeCourseCart } from '../redux/slices/cartSlice';
 
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { Platform, StyleSheet, View, FlatList, Alert } from 'react-native';
 import React from 'react'
 
 // data imports
 import data from '../data/testData';
 // components imports
-import CourseCatalogue from '../components/courseCatalogue';
+import CatalogueItem from '../components/catalogueItem';
 
 const CatalogueScreen = () => {
-  // const dispatch = useDispatch();
-  // const cartStore = useSelector(state => state.cart.addedCourses);
-  // const [addedCourses, setAddedCourses] = useState(cartStore);
+  const dispatch = useDispatch();
+  const cartStore = useSelector(state => state.cart.addedCourses);
+  const [addedCourses, setAddedCourses] = useState(cartStore);
 
-  // const handleAddCourse = (course) =>{
-  //   setAddedCourses(prevCourses=> [...prevCourses, course]);
-  //   dispatch(addCourseCart(course))
-  // } 
-  // const handleRemoveCourse = (course) =>{
-  //   dispatch(removeCourseCart(course.id))
-  // }
+  // mise à jour de la liste des cours ajoutés dans le panier (via cartStore)
+  useEffect(()=>{
+    setAddedCourses(cartStore)
+  },[cartStore])
 
- 
-  // if (!addedCourses.some(addedCourse => addedCourse.id === course.id )){
-  //   handleAddCourse(course);
-  // }>
-       
+  const handleAddCourse = (course) =>{
+    if (!addedCourses.some(addedCourse => addedCourse.id === course.id )){
+      setAddedCourses(prevCourses=> [...prevCourses, course]);
+      dispatch(addCourseCart(course));
+      // Afficher l'alerte
+      Alert.alert(
+        'Cours ajouté au panier',
+        `Vous avez ajouté le cours ${course.title} au panier.`,
+        [
+            { text: 'Annuler', onPress: () => dispatch(removeCourseCart(course.id)), style: 'cancel' },
+            { text: 'Valider', onPress: () => console.log('Cours ajouté au panier') }
+        ],
+        { cancelable: false }
+    );
+    }else{
+      Alert.alert(
+        'Cours déjà dans le panier',
+        `Vous pouvez ajouter d'autres cours au panier.`,   
+    )
+  }
+}
 
   return (
-    <View style={{marginBottom:30}}>
+    <View style={{flex:1, marginBottom:30}}>
       <FlatList
       data={data}
-      renderItem={({item})=> <CourseCatalogue course={item}/>}
+      renderItem={({item})=> <CatalogueItem course={item} handleAddCourse={()=>handleAddCourse(item)}/>}
       keyExtractor={item => item.id.toString()}
       contentContainerStyle={{marginBottom:100}}
       />

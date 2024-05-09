@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 
-const CourseCatalogue = ({course}) => {
+const CatalogueItem = ({course, handleAddCourse}) => {
   return (
     <View style={styles.container}>        
         <View style={styles.header}>
@@ -15,14 +15,19 @@ const CourseCatalogue = ({course}) => {
             <Text style={styles.price}>{course.price} €</Text>
         </View>
         <View style={styles.footer}>
-            <Text>view course</Text>
-            <MaterialIcons name="add-shopping-cart" size={24} color="black" style={{marginLeft:30}}/>
+            <MaterialIcons name="remove-red-eye" size={24} color="black" style={{marginRight:30}}/>
+            <MaterialIcons 
+                name="add-shopping-cart" 
+                size={24} color="black" 
+                style={{marginLeft:30}}
+                onPress={handleAddCourse}    
+            />
         </View>
     </View>
   )
 }
 
-export default CourseCatalogue
+export default CatalogueItem
 
 const styles = StyleSheet.create({
     container:{

@@ -48,7 +48,7 @@ const COURSES = [
   },
   {
     id: '6',
-    title: 'apprendre CSS3 ',
+    title: 'Apprendre CSS3 ',
     description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae, consequatur dolor sequi provident possimus sed ad qui ipsum similique odio iste molestias praesentium nemo ut facere, consectetur error in voluptate!',
     image: 'https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582747_640.png',
     price: 9.99,

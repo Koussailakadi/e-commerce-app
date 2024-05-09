@@ -1,64 +1,43 @@
-import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from'react-redux';
-import { addCourseCart, removeCourseCart } from '../redux/slices/cartSlice';
+import { removeCourseCart } from '../redux/slices/cartSlice';
 
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React from 'react'
+import { View, FlatList, Alert} from 'react-native';
+import {CartItem, PaymentItem, EmptyCart} from '../components/cartItem';
 
-// data imports
-import data from '../data/testData';
 
 const CartScreen = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const cartStore = useSelector(state => state.cart.addedCourses);
-  // const [addedCourses, setAddedCourses] = useState(cartStore);
 
-  // const handleAddCourse = (course) =>{
-  //   setAddedCourses(prevCourses=> [...prevCourses, course]);
-  //   dispatch(addCourseCart(course))
-  // } 
-  // const handleRemoveCourse = (course) =>{
-  //   dispatch(removeCourseCart(course.id))
-  // }
+  const handleRemoveCourse = (course) =>{
+     //dispatch(removeCourseCart(item.id))
+    Alert.alert(
+      'Cours supprimé du panier',
+      `Vous avez supprimé le cours ${course.title} du panier.`,
+      [
+          { text: 'Annuler', onPress: () => console.log('suppression du cours du panier annulée'), style: 'cancel' },
+          { text: 'Valider', onPress: () => dispatch(removeCourseCart(course.id))}
+      ],
+      { cancelable: false }
+    );
+  }
 
-  const renderCourses = ({item}) =>{
-        // if (!addedCourses.some(addedCourse => addedCourse.id === course.id )){
-        //   handleAddCourse(course);
-        // }
-        return (
-          <View style={styles.itemView}>
-            <Text style={{fontSize:18}}>{item.title}</Text>
-            <Text>{item.price}</Text>
-          </View>
-        )
+  if (cartStore.length === 0){
+    return <EmptyCart/>
   }
   
-  
-  if (cartStore.length === 0){
-    return (
-      <View style={{flex:1,justifyContent:'center', alignItems:'center'}}>
-        <Text style={{fontSize:20, fontWeight:'bold'}}>Cart is empty</Text>
-      </View>
-    )
-  } 
-
   return (
-    <FlatList
-      data={cartStore}
-      renderItem={renderCourses}
-      keyExtractor={item => item.id.toString()}
-    />
+    <View style={{flex:1, backgroundColor:'white'}}>
+      <FlatList
+        data={cartStore}
+        renderItem={({item})=><CartItem item={item} handleRemoveCourse={handleRemoveCourse}/>}
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={{backgroundColor:'white'}}
+      />
+      <PaymentItem cartStore={cartStore} />
+    </View>
   )
 }
 
 export default CartScreen
 
-const styles = StyleSheet.create({
-  itemView: {
-    flex:1,
-    justifyContent: 'center',
-    alignItems:'center',
-    marginVertical:20,
-    padding:10,
-    },
-})

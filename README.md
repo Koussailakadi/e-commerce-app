@@ -26,7 +26,7 @@ Voici un aperçu visuel des différents écrans de l'application :
     <img src="images/cours.png" width="200" height="450" alt="Mes Cours">
     <img src="images/achats.png" width="200" height="450" alt="Mes Achats">
     <img src="images/drawer.png" width="200" height="450" alt="Drawer">
-    <img src="images/addcours.png.png" width="200" height="450" alt="Ajouter un Cours">
+    <img src="images/addcours.png" width="200" height="450" alt="Ajouter un cours">
   </div>
 </div>
 

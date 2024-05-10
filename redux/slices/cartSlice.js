@@ -16,7 +16,6 @@ const cartSlice = createSlice({
             state.addedCourses.push(action.payload); 
         },
         removeCourseCart: (state, action) => {
-            console.log("remove ",action.payload);
             state.addedCourses = state.addedCourses.filter(course => course.id !== action.payload);
         }
 

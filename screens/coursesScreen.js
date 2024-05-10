@@ -1,15 +1,52 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useSelector, useDispatch } from'react-redux';
-import { removeCourseCart } from '../redux/slices/cartSlice';
+import {addCourseData, deleteCourseData} from '../redux/slices/courseSlice';
 
-import { StyleSheet, Text, View, FlatList, Alert, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, Modal} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import InputItem from '../components/courseItem';
 
 
-const CoursesScreen = () => {
+const CoursesScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const cartStore = useSelector(state => state.cart.addedCourses);
+  const courseStore = useSelector(state => state.courses.courses);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // form add course
+  const initialFormData={
+    id:'',
+    title:'',
+    description:'',
+    price:'',
+    image:'',
+    selected: false,
+    instructorId: '1'
+  }
+  const [formData, setFormData] = useState(initialFormData);
+
+
+  const handleAddCourse = (key, value) => {
+    const id = courseStore.length + 1;
+    if(key==='price'){
+      value = parseFloat(value);
+    }
+    setFormData((prevFormData)=>({...prevFormData, ['id']:id,[key]:value}));
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Mes Cours',
+      headerRight:()=>{ // icons à droite 
+        return <MaterialIcons 
+          name="add-circle-outline"
+          size={24} color="green" 
+          style={{marginRight:10}} 
+          onPress={()=>setIsVisible(true)}
+        />
+      },
+    });
+  });
 
   const handleRemoveCourse = (course) =>{
      //dispatch(removeCourseCart(item.id))
@@ -18,7 +55,7 @@ const CoursesScreen = () => {
       `Vous avez supprimé le cours ${course.title} du panier.`,
       [
           { text: 'Annuler', onPress: () => console.log('suppression du cours du panier annulée'), style: 'cancel' },
-          { text: 'Valider', onPress: () => dispatch(removeCourseCart(course.id))}
+          { text: 'Valider', onPress: () => dispatch(deleteCourseData(course.id))}
       ],
       { cancelable: false }
     );
@@ -48,9 +85,10 @@ const CoursesScreen = () => {
       </View>
     )
   }
-  if (cartStore.length === 0){
+
+  if (courseStore.length === 0){
     return (
-      <View style={{flex:1,justifyContent:'center', alignItems:'center'}}>
+      <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
         <Text style={{fontSize:20, fontWeight:'bold'}}>Aucun cours!</Text>
       </View>
     )
@@ -58,8 +96,71 @@ const CoursesScreen = () => {
 
   return (
     <View style={{flex:1, backgroundColor:'white'}}>
+      {/* ajout d'un nouveau cours */}
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={isVisible}
+        
+      >
+        <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'rgba(0, 0, 0, 0.2)'}}>
+          <View style={styles.modalView}>
+            <View style={{flexDirection:'row', justifyContent:'flex-end'}}>
+              <MaterialIcons 
+                name="close" 
+                size={24} color="green" 
+                style={{marginLeft:30}}
+                onPress={()=>setIsVisible(!isVisible)}    
+              />
+            </View>
+            <View style={{alignItems:'center'}}>
+              <Text style={{fontSize:20, fontWeight:'bold', marginBottom:30, marginTop:50}}>Ajouter un cours</Text>
+              <InputItem 
+                title="Titre" 
+                formKey="title" 
+                formValue={formData.title} 
+                setValue={handleAddCourse}
+              />
+              <InputItem 
+                title="Image" 
+                formKey="image" 
+                formValue={formData.image} 
+                setValue={handleAddCourse}
+              />
+              <InputItem 
+                title="Price" 
+                formKey="price" 
+                formValue={formData.price} 
+                setValue={handleAddCourse}
+              />
+              <InputItem 
+                title="Description" 
+                formKey="description" 
+                formValue={formData.description} 
+                setValue={handleAddCourse}
+              />
+              
+              <View style={styles.validate}>
+                <Text style={styles.text}>
+                  Ajouter la formation {formData.title} {!formData.price ? "" : `au prix ${formData.price} €` }
+                </Text>
+                <MaterialIcons 
+                  name="bookmark-add" 
+                  size={32} 
+                  color="green"
+                  disabled={!formData.title || !formData.image || !formData.price}
+                  onPress={()=>{dispatch(addCourseData(formData));setFormData(initialFormData)}}
+                  />
+              </View>
+              
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* les des cours */}
       <FlatList
-        data={cartStore}
+        data={courseStore}
         renderItem={renderCourses}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={{backgroundColor:'white'}}
@@ -104,13 +205,24 @@ const styles = StyleSheet.create({
       justifyContent:'space-between',
       marginTop:20
   },
-  payButton:{
-    flexDirection:'row',
-    justifyContent:'space-around',
+  //
+  modalView:{
+    backgroundColor:'white', 
+    height:600, 
+    width:'95%', 
+    borderRadius:20, 
+    borderWidth:2, 
+    borderColor:'black',
+    padding:10,
+  },
+  validate:{
+    alignItems:'center',
+    justifyContent:'space-between',
     verticalAlign:'center',
-    marginTop:20,
+    marginTop:50,
     marginLeft:30,
     marginRight:30,
     height:80
-  },
+},
+  
 })

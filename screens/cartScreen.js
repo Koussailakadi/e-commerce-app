@@ -10,7 +10,6 @@ const CartScreen = () => {
   const cartStore = useSelector(state => state.cart.addedCourses);
 
   const handleRemoveCourse = (course) =>{
-     //dispatch(removeCourseCart(item.id))
     Alert.alert(
       'Cours supprimé du panier',
       `Vous avez supprimé le cours ${course.title} du panier.`,
@@ -21,7 +20,6 @@ const CartScreen = () => {
       { cancelable: false }
     );
   }
-
   if (cartStore.length === 0){
     return <EmptyCart/>
   }

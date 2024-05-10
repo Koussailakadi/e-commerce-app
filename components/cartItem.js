@@ -1,23 +1,42 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from'react-redux';
+import { addCoursePurchased } from '../redux/slices/purchaseSlice';
+import { removeCourseCart } from '../redux/slices/cartSlice'
 
 const EmptyCart = () => {
     return (
         <View style={{flex:1,justifyContent:'center', alignItems:'center'}}>
-        <Text style={{fontSize:20, fontWeight:'bold'}}>Panier Vide!</Text>
+          <Text style={{fontSize:20, fontWeight:'bold'}}>Panier Vide!</Text>
         </View>
     )
 }
 const PaymentItem = ({cartStore}) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const handlePayment = () => {
+    console.log("payment")
+    dispatch(addCoursePurchased(cartStore))
+    cartStore.forEach(element => {
+      dispatch(removeCourseCart(element.id))
+    });
+    navigation.navigate('Mes Achats')
+  }
   return (
     <View style={{backgroundColor:'green',}}>
         <View style={styles.payButton}>
           <Text style={styles.text}>
             Total: {cartStore.reduce((total, course) => total + parseFloat(course.price), 0).toFixed(2)} €
           </Text>
-          <MaterialIcons name="payment" size={32} color="white"/>
+          <MaterialIcons 
+            name="payment" 
+            size={32} 
+            color="white"
+            onPress={handlePayment}
+          />
         </View>
-      </View>
+    </View>
   )
 }
 

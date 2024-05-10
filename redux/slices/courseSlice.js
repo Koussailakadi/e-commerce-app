@@ -6,13 +6,23 @@
 */
 import { createSlice } from '@reduxjs/toolkit';
 
-const coursesSlice = createSlice({
-    name: 'courses',
-    initialState: {},
-    reducers:{
+// import data:
+import data from '../../data/testData';
 
+const courseSlice = createSlice({
+    name: 'course',
+    initialState: {
+        courses: data,
+    },
+    reducers:{
+        addCourseData: (state, action) => {
+            state.courses.push(action.payload);
+        },
+        deleteCourseData: (state, action) => {
+            state.courses = state.courses.filter(course => course.id != action.payload);
+        }
     }
 });
 
-export const {} = coursesSlice.actions;
-export default coursesSlice.reducer;
+export const {addCourseData, deleteCourseData} = courseSlice.actions;
+export default courseSlice.reducer;

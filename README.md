@@ -18,17 +18,17 @@ L'application propose les fonctionnalités suivantes :
 
 Voici un aperçu visuel des différents écrans de l'application :
 
+| catalogue | pannier |
+|:---------:|:------:|
+| ![catalogue](images/catalogue.png) | ![pannier](images/pannier.png) |
 
-<div style="display: flex; flex-wrap: wrap;">
-  <div style="flex: 50%; padding: 5px;">
-    <img src="images/catalogue.png" width="200" height="450" alt="Catalogue">
-    <img src="images/pannier.png" width="200" height="450" alt="Panier">
-    <img src="images/cours.png" width="200" height="450" alt="Mes Cours">
-    <img src="images/achats.png" width="200" height="450" alt="Mes Achats">
-    <img src="images/drawer.png" width="200" height="450" alt="Drawer">
-    <img src="images/addcours.png" width="200" height="450" alt="Ajouter un cours">
-  </div>
-</div>
+| cours | achats |
+|:---------:|:----------:|
+| ![cours](images/cours.png) | ![achats](images/achats.png) |
+
+| drawer | addcours |
+|:---------:|:----------:|
+| ![drawer](images/drawer.png) | ![addcours](images/addcours.png) |
 
 ## Installation et Utilisation
 

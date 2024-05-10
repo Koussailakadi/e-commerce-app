@@ -18,13 +18,13 @@ L'application propose les fonctionnalités suivantes :
 
 Voici un aperçu visuel des différents écrans de l'application :
 
-![Catalogue](images/catalogue.png)
+<img src="images/catalogue.png" width="200" height="500" alt="Catalogue">
 
-![Panier](images/pannier.png)
+<img src="images/panier.png" width="200" height="500" alt="Panier">
 
-![Mes Cours](images/cours.png)
+<img src="images/mes_cours.png" width="200" height="500" alt="Mes Cours">
 
-![Mes Achats](images/achats.png)
+<img src="images/mes_achats.png" width="200" height="500" alt="Mes Achats">
 
 ## Installation et Utilisation
 
